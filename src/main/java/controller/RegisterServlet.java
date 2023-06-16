@@ -58,7 +58,7 @@ public class RegisterServlet extends HttpServlet {
 	        User newUser = new User(username, password, name, email);
 	        userDAO.insertUser(newUser);
 
-	        response.sendRedirect("paginaPrincipal.jsp");
+	        response.sendRedirect("TaskListServlet");
 	    }
         
     }

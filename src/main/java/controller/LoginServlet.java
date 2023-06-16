@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import dao.UserDAO;
 
 /**
@@ -47,7 +49,10 @@ public class LoginServlet extends HttpServlet {
 		}
 
 	    if (userDAO.isValidUser(username, password)) {
-	        response.sendRedirect("paginaPrincipal.jsp");
+	        HttpSession session = request.getSession();
+	        session.setAttribute("username", username);
+	        
+	        response.sendRedirect("TaskListServlet");
 	    } else {
 	        String errorMessage = "Invalid username or password";
 	        request.setAttribute("errorMessage", errorMessage);
