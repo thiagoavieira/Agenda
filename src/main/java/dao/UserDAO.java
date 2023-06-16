@@ -66,5 +66,25 @@ public class UserDAO {
         
         return isValid;
     }
+    
+    public static int getUserIdByUsername(String username) {
+        int userId = 0;
+        String query = "SELECT id FROM usuarios WHERE login = ?";
+
+        try (Connection connection = DBConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                userId = resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userId;
+    }
 
 }
