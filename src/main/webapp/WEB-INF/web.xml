@@ -22,6 +22,30 @@
   	<description></description>
   	<servlet-class>controller.TaskListServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>EditTaskServlet</servlet-name>
+  	<display-name>EditTaskServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.EditTaskServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>LogoutServlet</servlet-name>
+  	<display-name>LogoutServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>InProgressTasksServlet</servlet-name>
+  	<display-name>InProgressTasksServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.InProgressTasksServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>CompletedTasksServlet</servlet-name>
+  	<display-name>CompletedTasksServlet</display-name>
+  	<description></description>
+  	<servlet-class>controller.CompletedTasksServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>RegisterServlet</servlet-name>
   	<url-pattern>/register</url-pattern>
@@ -33,5 +57,21 @@
   <servlet-mapping>
   	<servlet-name>TaskListServlet</servlet-name>
   	<url-pattern>/TaskListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>EditTaskServlet</servlet-name>
+  	<url-pattern>/EditTaskServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>LogoutServlet</servlet-name>
+  	<url-pattern>/LogoutServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>InProgressTasksServlet</servlet-name>
+  	<url-pattern>/InProgressTasksServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>CompletedTasksServlet</servlet-name>
+  	<url-pattern>/CompletedTasksServlet</url-pattern>
   </servlet-mapping>
 </web-app>

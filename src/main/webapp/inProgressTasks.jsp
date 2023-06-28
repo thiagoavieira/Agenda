@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Task" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Task List</title>
+    
     <style>
     	* {
 	      margin: 0;
@@ -519,78 +521,67 @@
 
             <div class="menu">
                 <ul>
-                    <li><a href="#" alt="All">All</a></li>
-                    <li><a href="InProgressTasksServlet" alt="Open">Open</a></li>
+                    <li><a href="TaskListServlet" alt="All">All</a></li>
+                    <li><a href="#" alt="Open">Open</a></li>
                     <li><a href="CompletedTasksServlet" alt="Completed">Completed</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <h1>Task.io</h1>
-    
-	<div class="clear-fix"><br></div>
-	
-	<% List<?> tasks = (List<?>) request.getAttribute("tasks"); %>
-	
-    <div id="checklist" style="margin-top: <%= tasks.size() * 30 %>px;">
-        <% if (request.getAttribute("tasks") == null || ((List<?>) request.getAttribute("tasks")).isEmpty()) { %>
-            <p class="empty-tasks">Não há tarefas cadastradas.</p>
-        <% } else { %>
-            <table>
-                <% for (Object task : tasks) { %>
-                    <% Task taskItem = (Task) task; %>
-                    <tr>
-                        <td>
-                            <div class="task-item">
-                                <div class="task-content" style="margin-left: 30px">
-                                    <input type="checkbox" id="task<%= tasks.indexOf(task) %>" <% if (taskItem.getStatus().equals("completed")) { out.print("checked"); } %>>
-                                    <label for="task<%= tasks.indexOf(task) %>">
-                                        <strong>Title: <%= taskItem.getTitle() %></strong>
-                                    </label>
-                                    <br>
-                                    <p class="description">Description: <%= taskItem.getDescription() %></p>
-                                    <div class="meta">
-                                        <p>⠀➟⠀Created: <%= taskItem.getCreationDate() %> </p>
-                                    </div>
-                                    <% if (taskItem.getCompletionDate() != null) { %>
-                                        <p>⠀➟⠀Finalized: <%= taskItem.getCompletionDate() %> </p>
-                                    <% } %>
-                                </div>
-                                <div class="task-actions">
-								    <form action="TaskListServlet" method="POST" style="display: inline;">
-								        <input type="hidden" name="taskId" value="<%= taskItem.getId()%>">
-								        <input type="hidden" name="action" value="remove">
-								        <button class="remove-button" type="submit">REMOVE</button>
-								    </form>
-								    <form action="EditTaskServlet" method="GET" style="display: inline;">
-									    <input type="hidden" name="taskId" value="<%= taskItem.getId()%>">
-									    <button class="edit-button" type="submit">EDIT | COMPLETE</button>
-									</form>
-								</div>
-								<hr>
-                            </div>
-                        </td>
-                    </tr>
-                <% } %>
-            </table>
-        <% } %>
 
-        <div class="add-task">
-            <form action="TaskListServlet" method="POST" >
-                <input type="text" name="title" placeholder="Task Title" required style="width: 450px; height: 50px; margin: 2px;">
-                <br>
-                <input type="text" name="description" placeholder="Task Description" required style="width: 450px; height: 50px; margin: 2px;">
-                <br>
-                <button type="submit" style="display: inline-block; height: 50px; margin: 2px; width: 448px;">Add</button>
-            </form>
-        </div>
-    </div>
-    <div class="group">
-       	<form action="LogoutServlet" method="POST" style="display: inline;">
-		  <button class="button type1" type="submit">
-		    <span class="btn-txt">Logout</span>
-		  </button>
-		</form>
+	<%
+	  List<?> tasks = (List<?>) request.getAttribute("inProgressTasks");
+	%>
+    <div id="checklist" style="margin-top: <%= tasks.size() * 85 %>px;">
+        <% if (tasks == null || tasks.isEmpty()) { %>
+		    <p class="empty-tasks">Não há tarefas incompletas.</p>
+		<% } else { %>
+		    <table>
+		        <% for (Object task : tasks) { %>
+		            <% Task taskItem = (Task) task; %>
+		            <tr>
+		                <td>
+		                    <div class="task-item">
+		                        <div class="task-content" style="margin-left: 30px">
+		                            <input type="checkbox" id="task<%= tasks.indexOf(task) %>" <% if (taskItem.getStatus().equals("completed")) { out.print("checked"); } %>>
+		                            <label for="task<%= tasks.indexOf(task) %>">
+		                                <strong>Title: <%= taskItem.getTitle() %></strong>
+		                            </label>
+		                            <br>
+		                            <p class="description">Description: <%= taskItem.getDescription() %></p>
+		                            <div class="meta">
+		                                <p>⠀➟⠀Created: <%= taskItem.getCreationDate() %> </p>
+		                            </div>
+		                            <% if (taskItem.getCompletionDate() != null) { %>
+		                                <p>⠀➟⠀Finalized: <%= taskItem.getCompletionDate() %> </p>
+		                            <% } %>
+		                        </div>
+		                        <div class="task-actions">
+		                            <form action="TaskListServlet" method="POST" style="display: inline;">
+		                                <input type="hidden" name="taskId" value="<%= taskItem.getId()%>">
+		                                <input type="hidden" name="action" value="remove">
+		                                <button class="remove-button" type="submit">REMOVE</button>
+		                            </form>
+		                            <form action="EditTaskServlet" method="GET" style="display: inline;">
+		                                <input type="hidden" name="taskId" value="<%= taskItem.getId()%>">
+		                                <button class="edit-button" type="submit">EDIT | COMPLETE</button>
+		                            </form>
+		                        </div>
+		                        <hr>
+		                    </div>
+		                </td>
+		            </tr>
+		        <% } %>
+		    </table>
+		<% } %>
+
+        <!-- Adicione o formulário para adicionar novas tarefas -->
+        <form class="add-task" action="adicionar-tarefa.jsp" method="POST">
+            <input type="text" name="name" placeholder="Nome da tarefa" required>
+            <input type="text" name="description" placeholder="Descrição da tarefa">
+            <button type="submit">Adicionar Tarefa</button>
+        </form>
     </div>
 </body>
 </html>

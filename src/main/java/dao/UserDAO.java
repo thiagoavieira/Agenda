@@ -37,7 +37,7 @@ public class UserDAO {
         String query = "INSERT INTO usuarios (login, senha, nome, email) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getLogin());
-            statement.setString(2, user.getPassword());
+            statement.setString(2, PasswordEncryptor.encryptPassword(user.getPassword()));
             statement.setString(3, user.getUsername());
             statement.setString(4, user.getEmail());
 
@@ -49,21 +49,21 @@ public class UserDAO {
     
     public boolean isValidUser(String username, String password) {
         boolean isValid = false;
-        String query = "SELECT * FROM usuarios WHERE login = ? AND senha = ?";
-        
+        String query = "SELECT senha FROM usuarios WHERE login = ?";
+
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
-            statement.setString(2, password);
-            
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    isValid = true;
+                    String hashedPassword = resultSet.getString("senha");
+                    isValid = PasswordEncryptor.checkPassword(password, hashedPassword);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return isValid;
     }
     

@@ -62,18 +62,31 @@ public class TaskListServlet extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
-        
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-        String username = (String) session.getAttribute("username");
 
-        String creationDate = LocalDate.now().toString();
-        
-        int userId = UserDAO.getUserIdByUsername(username);
-        
-        Task newTask = new Task(title, description, creationDate, null, "incomplete", userId);
+        String action = request.getParameter("action");
 
-        TaskDAO.saveTask(newTask);
+        if (action != null && action.equals("remove")) {
+            // Remove a tarefa do banco de dados
+        	String taskIdParam = request.getParameter("taskId");
+        	int taskId = Integer.parseInt(taskIdParam);
+            System.out.println(taskId);
+            TaskDAO.removeTask(taskId);
+        } else {
+            // Adiciona uma nova tarefa ao banco de dados
+            String title = request.getParameter("title");
+            String description = request.getParameter("description");
+            String username = (String) session.getAttribute("username");
+
+            String creationDate = LocalDate.now().toString();
+
+            int userId = UserDAO.getUserIdByUsername(username);
+
+            Task newTask = new Task(title, description, creationDate, null, "incomplete", userId);
+
+            int taskId = TaskDAO.saveTask(newTask); // obtém o ID da tarefa salva
+            newTask.setId(taskId);
+            System.out.println(taskId);
+        }
 
         response.sendRedirect("TaskListServlet");
     }
